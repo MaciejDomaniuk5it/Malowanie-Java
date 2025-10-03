@@ -3,6 +3,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import javax.swing.JColorChooser;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -28,6 +32,22 @@ public class Malarz extends javax.swing.JFrame {
     public Malarz() {
         initComponents();
     }
+    
+    public void save()
+    {
+        BufferedImage bImg = new BufferedImage(Canvas.getWidth(), Canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D cg = bImg.createGraphics();
+        Canvas.paintAll(cg);
+        String SaveName = txtSaveName.getText();
+        try {
+                if (ImageIO.write(bImg, "png", new File("./" + SaveName + ".png")))
+                {
+                    System.out.println("Zapisano jako " + SaveName + ".png");
+                }
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,6 +66,9 @@ public class Malarz extends javax.swing.JFrame {
         btnColor = new javax.swing.JButton();
         txtColor = new javax.swing.JTextField();
         btnClear = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        txtSaveName = new javax.swing.JTextField();
+        lblPNG = new javax.swing.JLabel();
         Canvas = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,6 +89,9 @@ public class Malarz extends javax.swing.JFrame {
         });
 
         txtColor.setEditable(false);
+        txtColor.setBackground(new java.awt.Color(0, 0, 0));
+        txtColor.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        txtColor.setSelectionColor(new java.awt.Color(0, 0, 0));
 
         btnClear.setText("Wyczyść");
         btnClear.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -73,6 +99,15 @@ public class Malarz extends javax.swing.JFrame {
                 btnClearMouseClicked(evt);
             }
         });
+
+        btnSave.setText("Zapisz jako...");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        lblPNG.setText(".png");
 
         javax.swing.GroupLayout SettingsLayout = new javax.swing.GroupLayout(Settings);
         Settings.setLayout(SettingsLayout);
@@ -86,17 +121,23 @@ public class Malarz extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addGroup(SettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(SettingsLayout.createSequentialGroup()
-                        .addComponent(lblThickness)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(SettingsLayout.createSequentialGroup()
                         .addComponent(cbThickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
                         .addComponent(btnColor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 434, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtSaveName, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblPNG)
+                        .addGap(32, 32, 32)
                         .addComponent(btnClear)
-                        .addGap(18, 18, 18))))
+                        .addGap(18, 18, 18))
+                    .addGroup(SettingsLayout.createSequentialGroup()
+                        .addComponent(lblThickness)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         SettingsLayout.setVerticalGroup(
             SettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,7 +152,10 @@ public class Malarz extends javax.swing.JFrame {
                     .addComponent(cbThickness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnColor)
                     .addComponent(txtColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClear))
+                    .addComponent(btnClear)
+                    .addComponent(btnSave)
+                    .addComponent(txtSaveName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPNG))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -268,6 +312,10 @@ public class Malarz extends javax.swing.JFrame {
         graphics2D.fillRect(0, 0, 10000, 10000);
     }//GEN-LAST:event_btnClearMouseClicked
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        save();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -308,10 +356,13 @@ public class Malarz extends javax.swing.JFrame {
     private javax.swing.JPanel Settings;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnColor;
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> cbThickness;
     private javax.swing.JComboBox<String> cbTool;
+    private javax.swing.JLabel lblPNG;
     private javax.swing.JLabel lblThickness;
     private javax.swing.JLabel lblTool;
     private javax.swing.JTextField txtColor;
+    private javax.swing.JTextField txtSaveName;
     // End of variables declaration//GEN-END:variables
 }
